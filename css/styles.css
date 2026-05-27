@@ -1,28 +1,25 @@
-/* ============================================================
-   Joseph Birthday — styles.css
-   Pixel aesthetic · Coquette dark scrapbook · Forest green base
-   ============================================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
 
-/* Custom fonts (optional files in assets/fonts/) */
+/* Custom fonts with graceful fallback - font-display:optional suppresses 404 blocking */
 @font-face {
   font-family: 'Crustaceans';
   src: url('../assets/fonts/CrustaceansSignatureDEMO.woff2') format('woff2'),
        url('../assets/fonts/CrustaceansSignatureDEMO.woff')  format('woff');
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: 'Beachday';
   src: url('../assets/fonts/Beachday.woff2') format('woff2'),
        url('../assets/fonts/Beachday.woff')  format('woff');
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: 'KatalesBroken';
   src: url('../assets/fonts/KatalesBroken.woff2') format('woff2'),
        url('../assets/fonts/KatalesBroken.woff')  format('woff');
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ---- Variables ---- */
@@ -36,7 +33,7 @@
   --forest:   #0a3323;
   --ivory:    #f7f4d5;
 
-  /* Pixel font stack */
+  /* Pixel font stack with safe fallbacks */
   --px: 'Crustaceans','Press Start 2P','Silkscreen',monospace;
 
   --ease-bounce: cubic-bezier(0.34,1.56,0.64,1);
@@ -203,6 +200,22 @@ body {
 .pixel-btn:hover  { background:var(--lavender); transform:translate(-1px,-1px); box-shadow:4px 4px 0 rgba(0,0,0,.55); }
 .pixel-btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.4); }
 
+/* Celebrate button special style */
+.celebrate-btn-main {
+  background: linear-gradient(135deg, #fcb9aa, #cbaacb);
+  color: var(--forest);
+  animation: celebratePulse 2s ease-in-out infinite;
+}
+.celebrate-btn-main:hover {
+  background: linear-gradient(135deg, #cbaacb, #fcb9aa);
+  transform: translate(-2px, -2px) scale(1.05);
+  box-shadow: 5px 5px 0 rgba(0,0,0,.6);
+}
+@keyframes celebratePulse {
+  0%, 100% { box-shadow: 3px 3px 0 rgba(0,0,0,.5), 0 0 0 rgba(255,255,181,0); }
+  50% { box-shadow: 3px 3px 0 rgba(0,0,0,.5), 0 0 20px rgba(252,185,170,.4); }
+}
+
 /* ============================================================
    HERO
    ============================================================ */
@@ -265,7 +278,6 @@ body {
    ============================================================ */
 .scratch-card-wrap {
   position:relative;
-  /* rotate alternating slightly */
 }
 .scratch-card-wrap:nth-child(even) { transform:rotate(1.5deg); }
 .scratch-card-wrap:nth-child(odd)  { transform:rotate(-1deg);  }
@@ -277,7 +289,7 @@ body {
   padding:2rem 1.75rem 2.5rem;
   box-shadow: 4px 4px 0 rgba(0,0,0,.4), 6px 6px 0 rgba(0,0,0,.15);
   overflow:hidden;
-  cursor:none;  /* we use custom eraser cursor */
+  cursor:none;
 }
 
 .sn-yellow   { background:#fffacc; color:#2a2010; }
@@ -341,7 +353,7 @@ body {
 .sn-tape-right { left:auto; right:20px; transform:rotate(3deg); }
 
 /* ============================================================
-   FLOWER GARDEN (NOT pixelated — keep sticker feel)
+   FLOWER GARDEN — ORIGINAL EMOJI FLOWERS (cute, not pixelated)
    ============================================================ */
 .garden-flower {
   cursor:pointer;
@@ -349,7 +361,6 @@ body {
   padding:10px;
   border:2px solid transparent;
   transition: transform .25s var(--ease-bounce), border-color .2s;
-  /* Standby idle animation */
   animation: gardenIdle 3.5s ease-in-out infinite;
   position:relative;
 }
@@ -378,7 +389,7 @@ body {
   100% { transform:scale(1)   rotate(8deg);  }
 }
 
-/* flower emoji — NOT pixelated by design */
+/* flower emoji — NOT pixelated by design, cute & coquette */
 .garden-flower .f-emoji {
   font-size:3rem;
   line-height:1;
@@ -409,7 +420,6 @@ body {
   max-width:900px; margin:0 auto;
 }
 
-/* Each CD card is square */
 .cd-card {
   flex:1 1 240px; max-width:280px;
   background:rgba(255,255,255,.04);
@@ -426,7 +436,6 @@ body {
   box-shadow:3px 3px 0 rgba(203,170,203,.2), 0 0 24px rgba(203,170,203,.08);
 }
 
-/* CD disc container */
 .cd-disc-wrap {
   position:relative;
   width:130px; height:130px;
@@ -438,13 +447,11 @@ body {
   transition:transform .3s;
 }
 
-/* Spin when playing */
 .cd-svg.spinning {
   animation:cdSpin 3s linear infinite;
 }
 @keyframes cdSpin { to { transform:rotate(360deg); } }
 
-/* CD info */
 .cd-info {
   display:flex; flex-direction:column; align-items:center; gap:4px;
   text-align:center;
@@ -456,7 +463,6 @@ body {
   font-size:.58rem; color:var(--ivory); letter-spacing:.1em;
 }
 
-/* CD controls row */
 .cd-controls {
   display:flex; gap:8px;
 }
@@ -479,11 +485,9 @@ body {
 .btn-pause:hover { border-color:var(--cream); background:rgba(255,255,181,.15); }
 .btn-stop:hover  { border-color:var(--peach); background:rgba(252,185,170,.2); }
 
-/* Floating pixel music notes container */
 .cd-notes {
   position:absolute; inset:0; pointer-events:none; overflow:visible;
 }
-/* Individual notes spawned by JS */
 .px-note {
   position:absolute;
   font-family:var(--px);
@@ -512,7 +516,7 @@ body {
 .replay-btn-main:hover { background:rgba(203,170,203,.2); color:var(--ivory); border-color:var(--lavender); }
 
 /* ============================================================
-   PIXEL CONFETTI & BALLOONS (post-bake celebrate layer)
+   PIXEL CONFETTI & BALLOONS
    ============================================================ */
 .px-confetti {
   position:fixed;
@@ -527,7 +531,6 @@ body {
   100% { transform:translateY(100vh) rotate(540deg); opacity:0; }
 }
 
-/* Pixel balloon (SVG drawn via JS, injected as absolutely positioned el) */
 .px-balloon {
   position:fixed;
   pointer-events:none;
@@ -537,6 +540,29 @@ body {
 @keyframes balloonRise {
   0%   { transform:translateY(0)     rotate(0deg);  opacity:1; }
   100% { transform:translateY(-110vh) rotate(10deg); opacity:0; }
+}
+
+/* ============================================================
+   CELEBRATION LAYER - FALLING FLOWERS (cute, coquette, NOT pixelated)
+   ============================================================ */
+.falling-flower {
+  position: fixed;
+  pointer-events: none;
+  z-index: 101;
+  animation: flowerRain linear forwards;
+  font-size: 1.2rem;
+  -webkit-font-smoothing: antialiased;
+  image-rendering: auto;
+}
+@keyframes flowerRain {
+  0% {
+    transform: translateY(-20px) rotate(0deg) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg) scale(1.2);
+    opacity: 0;
+  }
 }
 
 /* ============================================================

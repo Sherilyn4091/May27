@@ -7,6 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css"/>
   <script>
+    // Suppress Tailwind dev warning in console
+    console.log = (function(orig){ return function(msg){ if(!msg || !msg.toString().includes('cdn.tailwindcss.com')) orig.apply(console, arguments); }; })(console.log);
+    
     tailwind.config = {
       theme: {
         extend: {
@@ -71,7 +74,7 @@
   <section id="loading-screen"
     class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-forest">
     <div class="grain-overlay"></div>
-    <p class="loading-label mb-6">loading something sweet...</p>
+    <p class="loading-label mb-6">loading something sweet ...</p>
     <div class="w-[300px] relative">
       <div class="h-[6px] rounded-full bg-white/10 overflow-visible relative">
         <div id="loading-progress" class="loading-bar-fill"></div>
@@ -123,7 +126,7 @@
     class="fixed inset-0 z-30 hidden flex-col items-center justify-center bg-forest">
     <div class="grain-overlay"></div>
 
-    <p class="bake-title px-text">HAPPY 23RD BIRTHDAY, JOSEPH!</p>
+    <p class="bake-title px-text">LET'S BAKE SIR!</p>
     <p class="bake-sub px-text">drag ingredients into the bowl</p>
 
     <!-- Ingredients row -->
@@ -132,7 +135,6 @@
       <!-- EGG -->
       <div class="ingredient" data-id="egg" draggable="true">
         <svg class="ingr-svg" viewBox="0 0 32 32" fill="none">
-          <!-- Pixel egg -->
           <rect x="12" y="2"  width="8"  height="2" fill="#f7f4d5"/>
           <rect x="10" y="4"  width="12" height="2" fill="#f7f4d5"/>
           <rect x="8"  y="6"  width="16" height="2" fill="#f7f4d5"/>
@@ -145,7 +147,6 @@
           <rect x="10" y="20" width="12" height="2" fill="#fffde0"/>
           <rect x="12" y="22" width="8"  height="2" fill="#fffde0"/>
           <rect x="14" y="24" width="4"  height="2" fill="#fffde0"/>
-          <!-- Shine -->
           <rect x="10" y="7"  width="4"  height="2" fill="white" opacity=".5"/>
         </svg>
         <span class="ingr-label px-text">EGG</span>
@@ -154,14 +155,11 @@
       <!-- CHOCOLATE -->
       <div class="ingredient" data-id="choco" draggable="true">
         <svg class="ingr-svg" viewBox="0 0 32 32" fill="none">
-          <!-- Pixel chocolate bar -->
           <rect x="4"  y="6"  width="24" height="20" fill="#5c3317"/>
           <rect x="4"  y="6"  width="24" height="2"  fill="#7a4520"/>
-          <!-- Bar segments -->
           <rect x="12" y="6"  width="2"  height="20" fill="#3b1f0a"/>
           <rect x="20" y="6"  width="2"  height="20" fill="#3b1f0a"/>
           <rect x="4"  y="14" width="24" height="2"  fill="#3b1f0a"/>
-          <!-- Shine -->
           <rect x="6"  y="8"  width="4"  height="2"  fill="#8a5228" opacity=".7"/>
         </svg>
         <span class="ingr-label px-text">CHOCO</span>
@@ -170,14 +168,11 @@
       <!-- MILK -->
       <div class="ingredient" data-id="milk" draggable="true">
         <svg class="ingr-svg" viewBox="0 0 32 32" fill="none">
-          <!-- Pixel milk carton -->
           <rect x="9"  y="2"  width="14" height="4"  fill="#c6dbda"/>
           <rect x="9"  y="6"  width="14" height="22" fill="#f0f8ff"/>
           <rect x="9"  y="6"  width="14" height="2"  fill="#c6dbda"/>
           <rect x="9"  y="22" width="14" height="2"  fill="#c6dbda"/>
-          <!-- Label -->
           <rect x="11" y="12" width="10" height="6"  fill="#8fcaca" opacity=".6"/>
-          <!-- Spout -->
           <rect x="13" y="0"  width="6"  height="2"  fill="#97c1a9"/>
         </svg>
         <span class="ingr-label px-text">MILK</span>
@@ -186,39 +181,30 @@
       <!-- FLOUR -->
       <div class="ingredient" data-id="flour" draggable="true">
         <svg class="ingr-svg" viewBox="0 0 32 32" fill="none">
-          <!-- Pixel flour bag -->
           <rect x="8"  y="4"  width="16" height="22" fill="#f7f4d5"/>
           <rect x="8"  y="4"  width="16" height="2"  fill="#e8e4c0"/>
           <rect x="10" y="6"  width="12" height="2"  fill="#d8d4a8"/>
-          <!-- Tie at top -->
           <rect x="12" y="2"  width="8"  height="2"  fill="#cbaacb"/>
-          <!-- Label text sim -->
           <rect x="10" y="12" width="12" height="2"  fill="#97c1a9" opacity=".6"/>
           <rect x="11" y="16" width="10" height="2"  fill="#97c1a9" opacity=".4"/>
-          <!-- Bottom seam -->
           <rect x="8"  y="24" width="16" height="2"  fill="#d8d4a8"/>
         </svg>
         <span class="ingr-label px-text">FLOUR</span>
       </div>
 
-      <!-- CHEF (stick person) -->
+      <!-- CHEF -->
       <div class="ingredient" data-id="joseph" draggable="true">
         <svg class="ingr-svg" viewBox="0 0 32 32" fill="none">
-          <!-- Chef hat -->
           <rect x="11" y="2"  width="10" height="2"  fill="#f7f4d5"/>
           <rect x="9"  y="4"  width="14" height="4"  fill="#f7f4d5"/>
           <rect x="11" y="8"  width="10" height="2"  fill="#c6dbda"/>
-          <!-- Head -->
           <rect x="12" y="10" width="8"  height="6"  fill="#fcb9aa"/>
           <rect x="14" y="12" width="2"  height="2"  fill="#0a3323"/>
           <rect x="18" y="12" width="2"  height="2"  fill="#0a3323"/>
           <rect x="14" y="15" width="4"  height="1"  fill="#0a3323"/>
-          <!-- Body -->
           <rect x="13" y="16" width="6"  height="8"  fill="#8fcaca"/>
-          <!-- Arms -->
           <rect x="9"  y="17" width="4"  height="2"  fill="#8fcaca"/>
           <rect x="19" y="17" width="4"  height="2"  fill="#8fcaca"/>
-          <!-- Legs -->
           <rect x="13" y="24" width="2"  height="6"  fill="#0a3323"/>
           <rect x="17" y="24" width="2"  height="6"  fill="#0a3323"/>
         </svg>
@@ -230,7 +216,6 @@
     <!-- Bowl drop zone -->
     <div id="bowl-zone" class="bowl-drop-zone mt-6">
       <svg id="bowl-svg" width="180" height="130" viewBox="0 0 180 130" fill="none">
-        <!-- Bowl body pixel-art -->
         <rect x="20" y="44" width="140" height="8"  fill="#8fcaca"/>
         <rect x="16" y="52" width="148" height="8"  fill="#8fcaca"/>
         <rect x="20" y="60" width="140" height="8"  fill="#6db8b8"/>
@@ -238,11 +223,8 @@
         <rect x="36" y="76" width="108" height="8"  fill="#4da6a6"/>
         <rect x="50" y="84" width="80"  height="8"  fill="#4da6a6"/>
         <rect x="64" y="92" width="52"  height="8"  fill="#3d9494"/>
-        <!-- Rim -->
         <rect x="20" y="36" width="140" height="10" fill="#c6dbda"/>
-        <!-- Ingredient fills (appended by JS) -->
         <g id="bowl-fills"></g>
-        <!-- Shine -->
         <rect x="28" y="46" width="14" height="4" fill="white" opacity=".22"/>
       </svg>
       <p id="bowl-hint" class="px-text bowl-hint-text">0 / 5</p>
@@ -250,50 +232,37 @@
 
     <!-- Cake result -->
     <div id="cake-result" class="hidden flex-col items-center gap-4 mt-4">
-      <!-- Pixelated SVG cake (transparent bg, no image) -->
-      <svg id="pixel-cake-svg" width="200" height="220" viewBox="0 0 200 220" fill="none"
-        style="image-rendering:pixelated">
-        <!-- Plate -->
+      <svg id="pixel-cake-svg" width="200" height="220" viewBox="0 0 200 220" fill="none" style="image-rendering:pixelated">
         <rect x="30"  y="198" width="140" height="8"  fill="#8fcaca"/>
         <rect x="20"  y="204" width="160" height="6"  fill="#6db8b8"/>
-        <!-- Bottom layer chocolate -->
         <rect x="30"  y="146" width="140" height="52" fill="#5c3317"/>
         <rect x="30"  y="146" width="140" height="6"  fill="#7a4520"/>
-        <!-- Ganache drips -->
         <rect x="40"  y="152" width="8"   height="14" fill="#2a0f00" opacity=".8"/>
         <rect x="62"  y="152" width="6"   height="18" fill="#2a0f00" opacity=".8"/>
         <rect x="88"  y="152" width="8"   height="12" fill="#2a0f00" opacity=".8"/>
         <rect x="112" y="152" width="6"   height="16" fill="#2a0f00" opacity=".8"/>
         <rect x="136" y="152" width="8"   height="10" fill="#2a0f00" opacity=".8"/>
         <rect x="158" y="152" width="6"   height="14" fill="#2a0f00" opacity=".8"/>
-        <!-- Frosting line bottom layer -->
         <rect x="30"  y="144" width="140" height="4"  fill="#f7f4d5"/>
-        <!-- Middle layer lavender -->
         <rect x="40"  y="104" width="120" height="42" fill="#cbaacb"/>
         <rect x="40"  y="104" width="120" height="5"  fill="#e0c8e0"/>
-        <!-- Drips layer 2 -->
         <rect x="52"  y="109" width="6"   height="10" fill="#a88aa8" opacity=".7"/>
         <rect x="76"  y="109" width="8"   height="14" fill="#a88aa8" opacity=".7"/>
         <rect x="104" y="109" width="6"   height="8"  fill="#a88aa8" opacity=".7"/>
         <rect x="128" y="109" width="8"   height="12" fill="#a88aa8" opacity=".7"/>
         <rect x="148" y="109" width="6"   height="9"  fill="#a88aa8" opacity=".7"/>
-        <!-- Frosting line mid layer -->
         <rect x="40"  y="102" width="120" height="4"  fill="#f7f4d5"/>
-        <!-- Top layer peach -->
         <rect x="54"  y="70"  width="92"  height="34" fill="#fcb9aa"/>
         <rect x="54"  y="70"  width="92"  height="4"  fill="#fdd0c4"/>
-        <!-- Cherry on top -->
         <rect x="92"  y="60"  width="2"   height="10" fill="#5c3317"/>
         <rect x="88"  y="54"  width="8"   height="8"  fill="#c0003c"/>
         <rect x="86"  y="56"  width="2"   height="4"  fill="#c0003c"/>
         <rect x="96"  y="56"  width="2"   height="4"  fill="#c0003c"/>
         <rect x="90"  y="52"  width="4"   height="2"  fill="#e00050"/>
-        <!-- Stars deco -->
         <rect x="50"  y="118" width="4"   height="4"  fill="#ffffb5"/>
         <rect x="130" y="122" width="4"   height="4"  fill="#ffffb5"/>
         <rect x="80"  y="80"  width="4"   height="4"  fill="#ffffb5"/>
         <rect x="118" y="78"  width="4"   height="4"  fill="#ffffb5"/>
-        <!-- Shine on layers -->
         <rect x="44"  y="110" width="8"   height="2"  fill="white" opacity=".2"/>
         <rect x="34"  y="152" width="10"  height="2"  fill="white" opacity=".2"/>
       </svg>
@@ -301,7 +270,6 @@
       <button id="bake-continue-btn" class="pixel-btn mt-1">CONTINUE</button>
     </div>
 
-    <!-- Pixel confetti + balloons layer (shown after baking) -->
     <div id="bake-celebrate" class="hidden fixed inset-0 pointer-events-none" style="z-index:35"></div>
   </section>
 
@@ -317,9 +285,7 @@
         <p class="hero-sub px-text">happy 23rd birthday ^ o ^</p>
         <h1 class="hero-name px-text">Joseph</h1>
 
-        <!-- Pixel facial expressions row -->
         <div class="faces-row">
-          <!-- Happy face -->
           <svg class="pixel-face" viewBox="0 0 24 24" fill="none">
             <rect x="4"  y="2"  width="16" height="2"  fill="#ffffb5"/>
             <rect x="2"  y="4"  width="20" height="16" fill="#ffffb5"/>
@@ -332,12 +298,10 @@
             <rect x="6"  y="14" width="2"  height="2"  fill="#0a3323"/>
             <rect x="16" y="14" width="2"  height="2"  fill="#0a3323"/>
           </svg>
-          <!-- Cool face -->
           <svg class="pixel-face" viewBox="0 0 24 24" fill="none">
             <rect x="4"  y="2"  width="16" height="2"  fill="#8fcaca"/>
             <rect x="2"  y="4"  width="20" height="16" fill="#8fcaca"/>
             <rect x="4"  y="20" width="16" height="2"  fill="#8fcaca"/>
-            <!-- Sunglasses -->
             <rect x="4"  y="8"  width="7"  height="4"  fill="#0a3323"/>
             <rect x="13" y="8"  width="7"  height="4"  fill="#0a3323"/>
             <rect x="11" y="9"  width="2"  height="2"  fill="#0a3323"/>
@@ -345,7 +309,6 @@
             <rect x="13" y="7"  width="8"  height="1"  fill="#0a3323"/>
             <rect x="6"  y="16" width="12" height="2"  fill="#0a3323"/>
           </svg>
-          <!-- Surprised face -->
           <svg class="pixel-face" viewBox="0 0 24 24" fill="none">
             <rect x="4"  y="2"  width="16" height="2"  fill="#cbaacb"/>
             <rect x="2"  y="4"  width="20" height="16" fill="#cbaacb"/>
@@ -354,36 +317,29 @@
             <rect x="14" y="8"  width="4"  height="4"  fill="#0a3323"/>
             <rect x="8"  y="7"  width="2"  height="2"  fill="white" opacity=".6"/>
             <rect x="16" y="7"  width="2"  height="2"  fill="white" opacity=".6"/>
-            <!-- O mouth -->
             <rect x="10" y="15" width="4"  height="4"  fill="#0a3323"/>
             <rect x="9"  y="16" width="2"  height="2"  fill="#0a3323"/>
             <rect x="13" y="16" width="2"  height="2"  fill="#0a3323"/>
           </svg>
-          <!-- Sparkle / excited face -->
           <svg class="pixel-face" viewBox="0 0 24 24" fill="none">
             <rect x="4"  y="2"  width="16" height="2"  fill="#fcb9aa"/>
             <rect x="2"  y="4"  width="20" height="16" fill="#fcb9aa"/>
             <rect x="4"  y="20" width="16" height="2"  fill="#fcb9aa"/>
-            <!-- Star eyes -->
             <rect x="7"  y="9"  width="2"  height="2"  fill="#0a3323"/>
             <rect x="6"  y="8"  width="4"  height="1"  fill="#0a3323"/>
             <rect x="6"  y="11" width="4"  height="1"  fill="#0a3323"/>
             <rect x="15" y="9"  width="2"  height="2"  fill="#0a3323"/>
             <rect x="14" y="8"  width="4"  height="1"  fill="#0a3323"/>
             <rect x="14" y="11" width="4"  height="1"  fill="#0a3323"/>
-            <!-- Smile with dimples -->
             <rect x="8"  y="16" width="8"  height="2"  fill="#0a3323"/>
             <rect x="7"  y="15" width="2"  height="1"  fill="#0a3323"/>
             <rect x="15" y="15" width="2"  height="1"  fill="#0a3323"/>
           </svg>
-          <!-- Winking face -->
           <svg class="pixel-face" viewBox="0 0 24 24" fill="none">
             <rect x="4"  y="2"  width="16" height="2"  fill="#97c1a9"/>
             <rect x="2"  y="4"  width="20" height="16" fill="#97c1a9"/>
             <rect x="4"  y="20" width="16" height="2"  fill="#97c1a9"/>
-            <!-- Wink left -->
             <rect x="6"  y="9"  width="4"  height="2"  fill="#0a3323"/>
-            <!-- Normal eye right -->
             <rect x="14" y="8"  width="4"  height="4"  fill="#0a3323"/>
             <rect x="16" y="7"  width="2"  height="2"  fill="white" opacity=".5"/>
             <rect x="8"  y="16" width="8"  height="2"  fill="#0a3323"/>
@@ -463,7 +419,7 @@
     </section>
 
     <!-- ============================================================
-         FLOWER GARDEN — NOT pixelated, keep stickers, animate on standby
+         FLOWER GARDEN — ORIGINAL EMOJI FLOWERS (cute, not pixelated)
     ============================================================ -->
     <section class="px-6 py-24 relative overflow-hidden reveal-section">
       <div class="grain-overlay"></div>
@@ -472,44 +428,34 @@
         click a flower
       </p>
       <div id="flower-garden" class="max-w-3xl mx-auto flex flex-wrap justify-center gap-8">
-        <!-- JS populates these — sticker emojis, NOT pixelated -->
+        <!-- JS populates emoji flowers -->
       </div>
     </section>
 
     <!-- ============================================================
-         CD MUSIC PLAYER — horizontal, 3 squares
+         CD MUSIC PLAYER
     ============================================================ -->
     <section class="px-6 py-24 relative reveal-section">
       <div class="grain-overlay"></div>
       <h2 class="section-title px-text text-center mb-4">birthday playlist</h2>
-      <p class="px-text text-center text-ivory/40 mb-14" style="font-size:.5rem;letter-spacing:.2em">
-        three songs, just for you
-      </p>
 
-      <!-- Horizontal row of 3 CD cards -->
       <div class="cd-player-row" id="cd-player">
-
         <!-- Track 1 -->
         <div class="cd-card reveal-item" data-track="0" data-src="assets/audio/HBD-Mr_chicken.mp3">
           <div class="cd-disc-wrap">
             <svg class="cd-svg" id="cd-0" viewBox="0 0 100 100">
-              <!-- Outer ring -->
               <circle cx="50" cy="50" r="47" fill="#1a1a2e" stroke="#cbaacb" stroke-width="2"/>
-              <!-- Iridescent rings (pixel approximation with rects around circle) -->
               <circle cx="50" cy="50" r="42" fill="none" stroke="#8fcaca"  stroke-width="1" opacity=".4"/>
               <circle cx="50" cy="50" r="38" fill="none" stroke="#cbaacb"  stroke-width="1" opacity=".3"/>
               <circle cx="50" cy="50" r="34" fill="none" stroke="#ffffb5"  stroke-width="1" opacity=".25"/>
               <circle cx="50" cy="50" r="30" fill="none" stroke="#fcb9aa"  stroke-width="1" opacity=".2"/>
               <circle cx="50" cy="50" r="26" fill="none" stroke="#97c1a9"  stroke-width="1" opacity=".2"/>
-              <!-- Center hole area -->
               <circle cx="50" cy="50" r="18" fill="#0a3323"/>
               <circle cx="50" cy="50" r="14" fill="#1a1a2e" stroke="#8fcaca" stroke-width="1"/>
               <circle cx="50" cy="50" r="5"  fill="#8fcaca" opacity=".6"/>
               <circle cx="50" cy="50" r="2"  fill="#0a3323"/>
-              <!-- Shine wedge (pixel) -->
               <rect x="52" y="10" width="6" height="4" fill="white" opacity=".15" transform="rotate(-30 50 50)"/>
             </svg>
-            <!-- Floating notes (hidden, shown when playing) -->
             <div class="cd-notes hidden" id="notes-0"></div>
           </div>
           <div class="cd-info">
@@ -572,7 +518,7 @@
           </div>
           <div class="cd-info">
             <span class="cd-track px-text">TRACK 03</span>
-            <span class="cd-name  px-text">JP Kids</span>
+            <span class="cd-name  px-text">Kids</span>
           </div>
           <div class="cd-controls">
             <button class="cd-btn btn-play  px-text" aria-label="Play">&#9654;</button>
@@ -580,18 +526,22 @@
             <button class="cd-btn btn-stop  px-text" aria-label="Stop">&#9632;</button>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- REPLAY -->
+    <!-- REPLAY + CELEBRATE BUTTON -->
     <section class="pb-28 text-center relative" style="z-index:2">
       <p class="px-text text-ivory/30 mb-6" style="font-size:.5rem;letter-spacing:.2em">
         want to go back to the start?
       </p>
-      <button id="replay-btn" class="pixel-btn replay-btn-main">
-        REPLAY &#8617;
-      </button>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button id="replay-btn" class="pixel-btn replay-btn-main">
+          REPLAY &#8617;
+        </button>
+        <button id="celebrate-btn" class="pixel-btn celebrate-btn-main">
+           confetti!
+        </button>
+      </div>
     </section>
 
   </main>
@@ -600,6 +550,9 @@
   <audio id="audio-0" preload="none"><source src="assets/audio/HBD-Mr_chicken.mp3" type="audio/mpeg"></audio>
   <audio id="audio-1" preload="none"><source src="assets/audio/HBD-lemon.mp3"      type="audio/mpeg"></audio>
   <audio id="audio-2" preload="none"><source src="assets/audio/HBD-JP_Kids.mp3"    type="audio/mpeg"></audio>
+
+  <!-- Celebration layer for falling flowers -->
+  <div id="celebrate-layer" class="fixed inset-0 pointer-events-none hidden" style="z-index:100"></div>
 
   <script src="js/animations.js"></script>
   <script src="js/interactions.js"></script>

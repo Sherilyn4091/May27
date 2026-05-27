@@ -3,10 +3,10 @@
    - Particle canvas
    - Baking mini-game (drag & drop + touch)
    - Post-bake pixel confetti & balloons
-   - Scratch-to-reveal notes
-   - Flower garden
+   - Scratch-to-reveal notes (FIXED: canvas sizing)
+   - Flower garden (ORIGINAL: emoji flowers, cute & coquette)
    - CD music player (with pixel floating notes)
-   - Replay
+   - Replay + NEW: Celebrate button with falling flowers
    ============================================================ */
 
 /* ============================================================
@@ -101,7 +101,7 @@
       clone.style.cssText = `position:fixed;opacity:.8;pointer-events:none;z-index:9999;
         left:${t.clientX - 30}px;top:${t.clientY - 44}px;transform:scale(1.1)`;
       document.body.appendChild(clone);
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
     el.addEventListener('touchmove', e => {
@@ -109,7 +109,7 @@
       const t = e.touches[0];
       clone.style.left = t.clientX - 30 + 'px';
       clone.style.top  = t.clientY - 44 + 'px';
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
     el.addEventListener('touchend', e => {
@@ -175,19 +175,14 @@
       cakeResult.style.opacity   = '1';
       cakeResult.style.transform = 'scale(1)';
     }));
-
-    /* Launch bake-scene pixel celebration */
     spawnBakeCelebration();
   }
 
-  /* ---- PIXEL CONFETTI + BALLOONS after baking ---- */
   const CONF_COLS = ['#cbaacb','#ffffb5','#c6dbda','#8fcaca','#97c1a9','#fcb9aa'];
   const BALL_COLS = ['#cbaacb','#ffffb5','#8fcaca','#fcb9aa','#97c1a9'];
 
   function spawnBakeCelebration() {
     celebrate.classList.remove('hidden');
-
-    /* Pixel confetti squares */
     for (let i = 0; i < 60; i++) {
       setTimeout(() => {
         const el = document.createElement('div');
@@ -201,8 +196,6 @@
         el.addEventListener('animationend', () => el.remove());
       }, Math.random() * 1500);
     }
-
-    /* Pixel SVG balloons rising from bottom */
     for (let i = 0; i < 8; i++) {
       setTimeout(() => spawnPixelBalloon(), Math.random() * 2000);
     }
@@ -210,20 +203,15 @@
 
   function spawnPixelBalloon() {
     const color = BALL_COLS[Math.floor(Math.random() * BALL_COLS.length)];
-    const x     = 10 + Math.random() * 80; /* vw */
+    const x     = 10 + Math.random() * 80;
     const dur   = 4 + Math.random() * 3;
-
     const wrap = document.createElement('div');
     wrap.classList.add('px-balloon');
     wrap.style.left             = x + 'vw';
     wrap.style.bottom           = '-60px';
     wrap.style.animationDuration = dur + 's';
-
-    /* Inline pixel balloon SVG (no emoji) */
     wrap.innerHTML = `
-      <svg width="36" height="52" viewBox="0 0 36 52" fill="none"
-        style="image-rendering:pixelated">
-        <!-- Balloon body (pixel rects) -->
+      <svg width="36" height="52" viewBox="0 0 36 52" fill="none" style="image-rendering:pixelated">
         <rect x="10" y="4"  width="16" height="2"  fill="${color}"/>
         <rect x="6"  y="6"  width="24" height="2"  fill="${color}"/>
         <rect x="4"  y="8"  width="28" height="2"  fill="${color}"/>
@@ -237,18 +225,14 @@
         <rect x="8"  y="24" width="20" height="2"  fill="${color}"/>
         <rect x="10" y="26" width="16" height="2"  fill="${color}"/>
         <rect x="14" y="28" width="8"  height="2"  fill="${color}"/>
-        <!-- Knot -->
         <rect x="16" y="30" width="4"  height="2"  fill="${color}" opacity=".7"/>
-        <!-- String (zigzag pixel) -->
         <rect x="18" y="32" width="2"  height="2"  fill="#f7f4d5" opacity=".5"/>
         <rect x="16" y="34" width="2"  height="2"  fill="#f7f4d5" opacity=".5"/>
         <rect x="18" y="36" width="2"  height="2"  fill="#f7f4d5" opacity=".5"/>
         <rect x="16" y="38" width="2"  height="2"  fill="#f7f4d5" opacity=".5"/>
         <rect x="18" y="40" width="2"  height="2"  fill="#f7f4d5" opacity=".5"/>
-        <!-- Shine -->
         <rect x="8"  y="10" width="6"  height="4"  fill="white"   opacity=".25"/>
       </svg>`;
-
     celebrate.appendChild(wrap);
     wrap.addEventListener('animationend', () => wrap.remove());
   }
@@ -262,7 +246,7 @@
 })();
 
 /* ============================================================
-   SCRATCH-TO-REVEAL NOTES
+   SCRATCH-TO-REVEAL NOTES — FIXED CANVAS SIZING
    ============================================================ */
 (function initScratchNotes() {
   document.querySelectorAll('.scratch-note').forEach(note => {
@@ -270,47 +254,53 @@
     const cursor = note.querySelector('.eraser-cursor');
     if (!canvas) return;
 
-    /* Size canvas to match the note card */
     function resize() {
-      const r  = note.getBoundingClientRect();
-      canvas.width  = r.width;
-      canvas.height = r.height;
-      drawScratchLayer(canvas);
+      const w = note.offsetWidth || note.clientWidth;
+      const h = note.offsetHeight || note.clientHeight;
+      if (w > 0 && h > 0) {
+        canvas.width = w;
+        canvas.height = h;
+        drawScratchLayer(canvas);
+      }
     }
 
-    /* Fill with tinted opaque overlay (pixel-checkerboard pattern) */
     function drawScratchLayer(c) {
       const ctx = c.getContext('2d');
       const fillColor = c.dataset.color || '#cbaacb';
+      
+      // SOLID base layer - ensures full coverage
       ctx.fillStyle = fillColor;
-      ctx.globalAlpha = 0.88;
-      ctx.fillRect(0, 0, c.width, c.height);
       ctx.globalAlpha = 1;
-
-      /* Pixel checkerboard deco on top */
-      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillRect(0, 0, c.width, c.height);
+      
+      // Semi-transparent overlay for scratch effect
+      ctx.globalAlpha = 0.92;
+      ctx.fillStyle = fillColor;
+      ctx.fillRect(0, 0, c.width, c.height);
+      
+      // Pixel checkerboard deco on top
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
       for (let x = 0; x < c.width; x += 8) {
         for (let y = 0; y < c.height; y += 8) {
           if ((x + y) % 16 === 0) ctx.fillRect(x, y, 8, 8);
         }
       }
 
-      /* "SCRATCH ME" hint text (pixel-style) */
-      ctx.fillStyle   = 'rgba(10,51,35,0.5)';
-      ctx.font        = 'bold 11px "Press Start 2P", monospace';
+      ctx.fillStyle   = 'rgba(10,51,35,0.55)';
+      ctx.font        = 'bold 10px "Press Start 2P", monospace';
       ctx.textAlign   = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('SCRATCH ME', c.width / 2, c.height / 2);
     }
 
     let painting = false;
-    const ERASER_R = 22;
+    const ERASER_R = 24;
 
     function erase(x, y) {
       const ctx = canvas.getContext('2d');
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      /* Square eraser to match pixel aesthetic */
       ctx.rect(x - ERASER_R, y - ERASER_R, ERASER_R * 2, ERASER_R * 2);
       ctx.fill();
       ctx.globalCompositeOperation = 'source-over';
@@ -324,43 +314,61 @@
       return { x: e.clientX - r.left, y: e.clientY - r.top };
     }
 
-    /* Show / move eraser cursor label */
     function moveCursor(e) {
       const { x, y } = getPos(e);
       if (cursor) {
         cursor.style.display = 'block';
-        cursor.style.left    = x + 'px';
-        cursor.style.top     = y + 'px';
+        cursor.style.left = x + 'px';
+        cursor.style.top = y + 'px';
       }
     }
 
     canvas.addEventListener('mouseenter', () => { if (cursor) cursor.style.display = 'block'; });
     canvas.addEventListener('mouseleave', () => { painting = false; if (cursor) cursor.style.display = 'none'; });
-    canvas.addEventListener('mousemove',  e => { moveCursor(e); if (painting) erase(getPos(e).x, getPos(e).y); });
-    canvas.addEventListener('mousedown',  e => { painting = true; erase(getPos(e).x, getPos(e).y); });
-    canvas.addEventListener('mouseup',    () => { painting = false; });
+    canvas.addEventListener('mousemove', e => { moveCursor(e); if (painting) erase(getPos(e).x, getPos(e).y); });
+    canvas.addEventListener('mousedown', e => { painting = true; erase(getPos(e).x, getPos(e).y); });
+    canvas.addEventListener('mouseup', () => { painting = false; });
+    
+    // Touch events with proper cancelable check
+    canvas.addEventListener('touchstart', e => { 
+      painting = true; 
+      erase(getPos(e).x, getPos(e).y); 
+      if (e.cancelable) e.preventDefault(); 
+    }, { passive: false });
+    
+    canvas.addEventListener('touchmove', e => { 
+      if (painting) { 
+        moveCursor(e); 
+        erase(getPos(e).x, getPos(e).y); 
+      }
+      if (e.cancelable) e.preventDefault(); 
+    }, { passive: false });
+    
+    canvas.addEventListener('touchend', () => { painting = false; });
 
-    canvas.addEventListener('touchstart', e => { painting = true; erase(getPos(e).x, getPos(e).y); e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchmove',  e => { if (painting) { moveCursor(e); erase(getPos(e).x, getPos(e).y); } e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchend',   () => { painting = false; });
-
-    /* Observe when card enters viewport → then size canvas */
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          resize();
-          obs.unobserve(note);
-        }
-      });
-    }, { threshold: 0.1 });
-    obs.observe(note);
+    // Use ResizeObserver for reliable sizing when element renders
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => resize());
+      ro.observe(note);
+    } else {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            setTimeout(resize, 50);
+            obs.unobserve(note);
+          }
+        });
+      }, { threshold: 0.1 });
+      obs.observe(note);
+    }
 
     window.addEventListener('resize', resize);
+    setTimeout(resize, 100);
   });
 })();
 
 /* ============================================================
-   FLOWER GARDEN (sticker style, NOT pixelated)
+   FLOWER GARDEN — ORIGINAL EMOJI FLOWERS (cute, not pixelated)
    ============================================================ */
 (function initFlowerGarden() {
   const garden = document.getElementById('flower-garden');
@@ -415,7 +423,7 @@
    ============================================================ */
 (function initCDPlayer() {
   const cards = document.querySelectorAll('.cd-card');
-  let current = null;   /* { audio, card, cdSvg, notesEl, noteTimer } */
+  let current = null;
 
   cards.forEach((card, idx) => {
     const audioEl  = document.getElementById('audio-' + idx);
@@ -427,17 +435,15 @@
 
     if (!audioEl) return;
 
-    /* PLAY */
     btnPlay.addEventListener('click', () => {
       if (current && current.audio !== audioEl) stopTrack(current);
       current = { audio: audioEl, card, cdSvg, notesEl, noteTimer: null };
-      audioEl.play().catch(() => {/* blocked by browser until user gesture already done */});
+      audioEl.play().catch(() => {});
       card.classList.add('playing');
       if (cdSvg) cdSvg.classList.add('spinning');
       startNotes(current);
     });
 
-    /* PAUSE */
     btnPause.addEventListener('click', () => {
       audioEl.pause();
       card.classList.remove('playing');
@@ -445,7 +451,6 @@
       if (current && current.audio === audioEl) stopNotes(current);
     });
 
-    /* STOP */
     btnStop.addEventListener('click', () => {
       stopTrack({ audio: audioEl, card, cdSvg, notesEl,
         noteTimer: current && current.audio === audioEl ? current.noteTimer : null });
@@ -468,9 +473,7 @@
     stopNotes(t);
   }
 
-  /* ---- Floating pixel music notes ---- */
-  /* Note symbols drawn with ASCII/unicode, rendered in pixel font */
-  const NOTE_SYMS = ['J','JJ','d','b'];  /* pixel-font rendered as note-like chars */
+  const NOTE_SYMS = ['J','JJ','d','b'];
   const NOTE_COLS = ['#ffffb5','#cbaacb','#c6dbda','#fcb9aa','#97c1a9'];
 
   function startNotes(t) {
@@ -489,9 +492,9 @@
   function spawnNote(container) {
     const el = document.createElement('div');
     el.classList.add('px-note');
-    el.textContent = '&#9835;'; /* musical note char — renders in pixel font */
+    el.textContent = '\u266A';
     el.innerHTML   = NOTE_SYMS[Math.floor(Math.random() * NOTE_SYMS.length)] === 'JJ'
-      ? '&#9835;&#9835;' : '&#9835;';
+      ? '\u266A\u266A' : '\u266A';
     el.style.color           = NOTE_COLS[Math.floor(Math.random() * NOTE_COLS.length)];
     el.style.left            = (20 + Math.random() * 60) + '%';
     el.style.top             = (30 + Math.random() * 40) + '%';
@@ -502,9 +505,60 @@
 })();
 
 /* ============================================================
-   REPLAY
+   REPLAY + CELEBRATE BUTTON
    ============================================================ */
-(function initReplay() {
-  const btn = document.getElementById('replay-btn');
-  if (btn) btn.addEventListener('click', () => location.reload());
+(function initReplayAndCelebrate() {
+  // Replay button
+  const replayBtn = document.getElementById('replay-btn');
+  if (replayBtn) replayBtn.addEventListener('click', () => location.reload());
+
+  // Celebrate button - confetti + falling cute flowers
+  const celebrateBtn = document.getElementById('celebrate-btn');
+  const celebrateLayer = document.getElementById('celebrate-layer');
+  
+  if (celebrateBtn && celebrateLayer) {
+    celebrateBtn.addEventListener('click', () => {
+      // Show layer
+      celebrateLayer.classList.remove('hidden');
+      
+      // Spawn pixel confetti
+      const CONF_COLS = ['#ffffb5','#cbaacb','#fcb9aa','#c6dbda','#f7f4d5','#8fcaca','#97c1a9'];
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          const conf = document.createElement('div');
+          conf.className = 'px-confetti';
+          conf.style.left = Math.random() * 100 + 'vw';
+          conf.style.top = '-10px';
+          conf.style.background = CONF_COLS[Math.floor(Math.random() * CONF_COLS.length)];
+          conf.style.animationDuration = (2 + Math.random() * 2) + 's';
+          conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+          celebrateLayer.appendChild(conf);
+          conf.addEventListener('animationend', () => conf.remove());
+        }, i * 40);
+      }
+      
+      // Spawn falling cute flowers (sunflowers 🌻 and daisies 🌼)
+      const FLOWER_EMOJIS = ['🌻', '🌼', '🌸', '🌷', '💐'];
+      for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+          const flower = document.createElement('div');
+          flower.className = 'falling-flower';
+          flower.textContent = FLOWER_EMOJIS[Math.floor(Math.random() * FLOWER_EMOJIS.length)];
+          flower.style.left = Math.random() * 100 + 'vw';
+          flower.style.animationDuration = (3 + Math.random() * 3) + 's';
+          flower.style.animationDelay = Math.random() * 0.5 + 's';
+          flower.style.fontSize = (0.9 + Math.random() * 0.8) + 'rem';
+          celebrateLayer.appendChild(flower);
+          flower.addEventListener('animationend', () => flower.remove());
+        }, i * 120);
+      }
+      
+      // Hide layer after animation completes
+      setTimeout(() => {
+        celebrateLayer.classList.add('hidden');
+        // Clean up any remaining elements
+        celebrateLayer.querySelectorAll('.px-confetti, .falling-flower').forEach(el => el.remove());
+      }, 6000);
+    });
+  }
 })();
