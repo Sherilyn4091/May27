@@ -1,0 +1,562 @@
+/* ============================================================
+   Joseph Birthday — styles.css
+   Pixel aesthetic · Coquette dark scrapbook · Forest green base
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+
+/* Custom fonts (optional files in assets/fonts/) */
+@font-face {
+  font-family: 'Crustaceans';
+  src: url('../assets/fonts/CrustaceansSignatureDEMO.woff2') format('woff2'),
+       url('../assets/fonts/CrustaceansSignatureDEMO.woff')  format('woff');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beachday';
+  src: url('../assets/fonts/Beachday.woff2') format('woff2'),
+       url('../assets/fonts/Beachday.woff')  format('woff');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KatalesBroken';
+  src: url('../assets/fonts/KatalesBroken.woff2') format('woff2'),
+       url('../assets/fonts/KatalesBroken.woff')  format('woff');
+  font-display: swap;
+}
+
+/* ---- Variables ---- */
+:root {
+  --lavender: #cbaacb;
+  --cream:    #ffffb5;
+  --mint:     #c6dbda;
+  --teal:     #8fcaca;
+  --sage:     #97c1a9;
+  --peach:    #fcb9aa;
+  --forest:   #0a3323;
+  --ivory:    #f7f4d5;
+
+  /* Pixel font stack */
+  --px: 'Crustaceans','Press Start 2P','Silkscreen',monospace;
+
+  --ease-bounce: cubic-bezier(0.34,1.56,0.64,1);
+  --ease-smooth: cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+/* ---- Reset ---- */
+*,*::before,*::after { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--px);
+  background: var(--forest);
+  color: var(--ivory);
+  overflow-x: hidden;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  image-rendering: pixelated;
+}
+
+/* Pixel font helper — applied globally to text elements */
+.px-text {
+  font-family: var(--px);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+/* Grain overlay */
+.grain-overlay {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 180px; opacity:.5; pointer-events:none; z-index:0;
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+#loading-screen {
+  background: radial-gradient(ellipse at 40% 60%,#0d4a30 0%,var(--forest) 70%);
+}
+
+.loading-label {
+  font-size: .6rem; color: rgba(247,244,213,.4); letter-spacing:.25em;
+}
+
+.loading-percent { font-size:.55rem; }
+
+/* Loading bar — CSS animation 3 s */
+.loading-bar-fill {
+  width: 0%; height:100%; border-radius:999px;
+  background: linear-gradient(90deg,var(--cream),var(--lavender),var(--mint));
+  animation: loadBar 3s linear forwards;
+  box-shadow: 0 0 10px rgba(203,170,203,.4);
+}
+@keyframes loadBar { to { width:100%; } }
+
+/* Daisy slides along bar */
+#loading-flower {
+  animation: moveFlower 3s linear forwards;
+  filter: drop-shadow(0 0 5px rgba(247,244,213,.35));
+}
+@keyframes moveFlower { to { left: calc(300px - 22px); } }
+
+/* ============================================================
+   DAISY TRANSITION
+   ============================================================ */
+#big-daisy {
+  transform-origin:center;
+  filter: drop-shadow(0 0 40px rgba(247,244,213,.2));
+  animation: daisyBloom 2.2s var(--ease-smooth) forwards;
+}
+@keyframes daisyBloom {
+  0%   { transform:scale(1);  opacity:1; }
+  60%  { transform:scale(18); opacity:1; }
+  100% { transform:scale(32); opacity:0; }
+}
+
+/* ============================================================
+   FLOATING BACKGROUND DECORATIONS
+   ============================================================ */
+.float-flower { position:absolute; pointer-events:none; animation:floatFlower 8s ease-in-out infinite; }
+.f1 { top:8%;   left:4%;   animation-duration:9s;   }
+.f2 { top:55%;  right:5%;  animation-duration:7s;   animation-delay:1.2s; }
+.f3 { bottom:12%;left:12%; animation-duration:11s;  animation-delay:2.5s; }
+.f4 { top:30%;  right:20%; animation-duration:8.5s; animation-delay:.8s;  }
+@keyframes floatFlower {
+  0%,100% { transform:translateY(0) rotate(0deg);   }
+  50%     { transform:translateY(-20px) rotate(10deg); }
+}
+
+/* ============================================================
+   BAKING MINI-GAME
+   ============================================================ */
+#bake-scene {
+  background: radial-gradient(ellipse at 50% 60%,#0d4a30 0%,var(--forest) 65%);
+  gap:0; padding:1rem;
+}
+
+.bake-title {
+  font-size: clamp(.5rem,2vw,.8rem);
+  color: var(--cream);
+  letter-spacing:.15em; text-align:center; margin-bottom:.4rem;
+  text-shadow: 2px 2px 0 #0a3323, 4px 4px 0 rgba(255,255,181,.12);
+}
+
+.bake-sub {
+  font-size: clamp(.4rem,1.5vw,.58rem);
+  color: rgba(247,244,213,.4);
+  letter-spacing:.2em; text-align:center; margin-bottom:.2rem;
+}
+
+/* Ingredient chips */
+.ingredient {
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  cursor:grab; user-select:none;
+  background: rgba(247,244,213,.05);
+  border: 2px solid rgba(198,219,218,.3);
+  padding:.5rem .7rem;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5), inset -1px -1px 0 rgba(0,0,0,.2);
+  transition: transform .15s var(--ease-bounce), opacity .2s;
+  image-rendering: pixelated;
+}
+.ingredient:active { cursor:grabbing; transform:scale(1.12); }
+.ingredient.used   { opacity:.3; pointer-events:none; }
+
+.ingr-svg   { width:40px; height:40px; image-rendering:pixelated; }
+.ingr-label { font-size:.4rem; color:var(--teal); letter-spacing:.18em; }
+
+/* Bowl zone */
+.bowl-drop-zone {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  transition:transform .2s;
+}
+#bowl-svg { filter:drop-shadow(0 6px 16px rgba(0,0,0,.4)); transition:filter .3s; }
+.bowl-drop-zone.drag-over #bowl-svg {
+  filter:drop-shadow(0 0 20px rgba(143,202,202,.6));
+}
+.bowl-hint-text { font-size:.5rem; color:rgba(247,244,213,.45); letter-spacing:.2em; }
+
+/* Cake done text */
+.cake-done-text {
+  font-size: clamp(.45rem,2vw,.7rem);
+  color:var(--cream); letter-spacing:.2em;
+  text-shadow:2px 2px 0 #0a3323;
+}
+
+/* ============================================================
+   PIXEL BUTTON (shared)
+   ============================================================ */
+.pixel-btn {
+  font-family: var(--px);
+  font-size: .52rem;
+  letter-spacing: .18em;
+  color: var(--forest);
+  background: var(--cream);
+  border: none;
+  padding: .7rem 1.4rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5), 5px 5px 0 rgba(255,255,181,.12);
+  transition: transform .1s, box-shadow .1s;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+.pixel-btn:hover  { background:var(--lavender); transform:translate(-1px,-1px); box-shadow:4px 4px 0 rgba(0,0,0,.55); }
+.pixel-btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.4); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero-sub {
+  font-size: clamp(.42rem,1.5vw,.65rem);
+  letter-spacing:.35em; color:var(--teal);
+}
+
+.hero-name {
+  font-size: clamp(2.2rem,11vw,6.5rem);
+  color:var(--cream); line-height:.95; letter-spacing:-.02em;
+  text-shadow: 4px 4px 0 rgba(10,51,35,.9), 8px 8px 0 rgba(255,255,181,.07),
+               -2px -2px 0 rgba(203,170,203,.18);
+}
+
+/* Pixel facial expressions row */
+.faces-row {
+  display:flex; justify-content:center; gap:12px; margin-top:1rem; flex-wrap:wrap;
+}
+.pixel-face {
+  width:48px; height:48px;
+  image-rendering:pixelated;
+  animation: faceBob 3s ease-in-out infinite;
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.4));
+}
+.pixel-face:nth-child(1) { animation-delay:0s;    }
+.pixel-face:nth-child(2) { animation-delay:.4s;   }
+.pixel-face:nth-child(3) { animation-delay:.8s;   }
+.pixel-face:nth-child(4) { animation-delay:1.2s;  }
+.pixel-face:nth-child(5) { animation-delay:1.6s;  }
+@keyframes faceBob {
+  0%,100% { transform:translateY(0);    }
+  50%     { transform:translateY(-6px); }
+}
+
+.hero-stars { display:flex; justify-content:center; gap:8px; margin-top:.6rem; }
+.star-dot {
+  width:5px; height:5px;
+  background:var(--lavender);
+  animation:starPulse 2.4s ease-in-out infinite;
+}
+.star-dot:nth-child(2) { animation-delay:.4s; background:var(--teal);  }
+.star-dot:nth-child(3) { animation-delay:.8s; background:var(--peach); }
+@keyframes starPulse {
+  0%,100% { transform:scale(1); opacity:.6; }
+  50%     { transform:scale(2); opacity:1;  }
+}
+
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
+.section-title {
+  font-size: clamp(.75rem,2.5vw,1.3rem);
+  color:var(--cream);
+  text-shadow:3px 3px 0 rgba(10,51,35,.8);
+}
+
+/* ============================================================
+   SCRATCH NOTES
+   ============================================================ */
+.scratch-card-wrap {
+  position:relative;
+  /* rotate alternating slightly */
+}
+.scratch-card-wrap:nth-child(even) { transform:rotate(1.5deg); }
+.scratch-card-wrap:nth-child(odd)  { transform:rotate(-1deg);  }
+
+.scratch-note {
+  position:relative;
+  width:100%;
+  min-height:180px;
+  padding:2rem 1.75rem 2.5rem;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.4), 6px 6px 0 rgba(0,0,0,.15);
+  overflow:hidden;
+  cursor:none;  /* we use custom eraser cursor */
+}
+
+.sn-yellow   { background:#fffacc; color:#2a2010; }
+.sn-mint     { background:#d4edea; color:#0d2e2b; }
+.sn-peach    { background:#fde0d7; color:#2e1510; }
+.sn-lavender { background:#e8d8e8; color:#1e0e1e; }
+
+/* Hidden text (revealed by scratching) */
+.scratch-hidden-text {
+  font-size: clamp(.45rem,1.8vw,.68rem);
+  line-height:2.2;
+  position:relative; z-index:0;
+  pointer-events:none;
+  padding:.25rem 0;
+}
+
+/* Scratch canvas sits on top of text */
+.scratch-canvas {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  cursor:none;
+  z-index:2;
+  image-rendering: pixelated;
+}
+
+/* Eraser label that follows cursor */
+.eraser-cursor {
+  position:absolute;
+  font-size:.38rem;
+  letter-spacing:.15em;
+  color:rgba(10,51,35,.7);
+  background:rgba(247,244,213,.9);
+  padding:3px 6px;
+  pointer-events:none;
+  z-index:10;
+  box-shadow:1px 1px 0 rgba(0,0,0,.3);
+  transform:translate(-50%,-140%);
+  white-space:nowrap;
+  display:none;
+  image-rendering:pixelated;
+}
+
+/* Pin */
+.sn-pin {
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  width:12px; height:12px;
+  background:#c0005e;
+  box-shadow:2px 2px 0 rgba(0,0,0,.4);
+  z-index:5;
+}
+
+/* Tape */
+.sn-tape {
+  position:absolute; top:-7px; left:28px;
+  width:54px; height:18px;
+  background:rgba(255,255,181,.5);
+  transform:rotate(-2deg);
+  box-shadow:1px 1px 0 rgba(0,0,0,.15);
+  z-index:5;
+}
+.sn-tape-right { left:auto; right:20px; transform:rotate(3deg); }
+
+/* ============================================================
+   FLOWER GARDEN (NOT pixelated — keep sticker feel)
+   ============================================================ */
+.garden-flower {
+  cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:10px;
+  border:2px solid transparent;
+  transition: transform .25s var(--ease-bounce), border-color .2s;
+  /* Standby idle animation */
+  animation: gardenIdle 3.5s ease-in-out infinite;
+  position:relative;
+}
+.garden-flower:nth-child(2) { animation-delay:.5s;  animation-duration:4s;   }
+.garden-flower:nth-child(3) { animation-delay:1s;   animation-duration:3s;   }
+.garden-flower:nth-child(4) { animation-delay:1.5s; animation-duration:4.5s; }
+.garden-flower:nth-child(5) { animation-delay:.8s;  animation-duration:3.8s; }
+.garden-flower:nth-child(6) { animation-delay:1.3s; animation-duration:4.2s; }
+
+@keyframes gardenIdle {
+  0%,100% { transform:translateY(0) rotate(0deg)   scale(1);    }
+  25%     { transform:translateY(-8px) rotate(4deg)   scale(1.05); }
+  75%     { transform:translateY(-4px) rotate(-3deg)  scale(1.02); }
+}
+
+.garden-flower:hover {
+  animation:none;
+  transform:scale(1.3) rotate(15deg);
+  border-color:rgba(255,255,181,.25);
+}
+
+.garden-flower.bloomed { animation:bloomPop .4s var(--ease-bounce) forwards; }
+@keyframes bloomPop {
+  0%   { transform:scale(.8)  rotate(0deg);  }
+  50%  { transform:scale(1.5) rotate(22deg); }
+  100% { transform:scale(1)   rotate(8deg);  }
+}
+
+/* flower emoji — NOT pixelated by design */
+.garden-flower .f-emoji {
+  font-size:3rem;
+  line-height:1;
+  -webkit-font-smoothing: antialiased;
+  image-rendering: auto;
+}
+.garden-flower .f-label {
+  font-size:.4rem; font-family:var(--px);
+  color:rgba(247,244,213,.4); letter-spacing:.15em;
+  -webkit-font-smoothing:none;
+}
+
+/* Sparkle (pixel squares) */
+.sparkle {
+  position:absolute; width:5px; height:5px;
+  pointer-events:none;
+  animation:sparkleOut .6s ease forwards;
+}
+@keyframes sparkleOut {
+  to { transform:translate(var(--tx),var(--ty)) scale(0); opacity:0; }
+}
+
+/* ============================================================
+   CD MUSIC PLAYER
+   ============================================================ */
+.cd-player-row {
+  display:flex; flex-wrap:wrap; justify-content:center; gap:20px;
+  max-width:900px; margin:0 auto;
+}
+
+/* Each CD card is square */
+.cd-card {
+  flex:1 1 240px; max-width:280px;
+  background:rgba(255,255,255,.04);
+  border:2px solid rgba(255,255,255,.08);
+  padding:1.5rem;
+  display:flex; flex-direction:column; align-items:center; gap:.75rem;
+  box-shadow:3px 3px 0 rgba(0,0,0,.45);
+  transition:border-color .3s, box-shadow .3s;
+  position:relative;
+}
+
+.cd-card.playing {
+  border-color:rgba(203,170,203,.5);
+  box-shadow:3px 3px 0 rgba(203,170,203,.2), 0 0 24px rgba(203,170,203,.08);
+}
+
+/* CD disc container */
+.cd-disc-wrap {
+  position:relative;
+  width:130px; height:130px;
+}
+
+.cd-svg {
+  width:130px; height:130px;
+  image-rendering:pixelated;
+  transition:transform .3s;
+}
+
+/* Spin when playing */
+.cd-svg.spinning {
+  animation:cdSpin 3s linear infinite;
+}
+@keyframes cdSpin { to { transform:rotate(360deg); } }
+
+/* CD info */
+.cd-info {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  text-align:center;
+}
+.cd-track {
+  font-size:.45rem; color:var(--lavender); letter-spacing:.2em;
+}
+.cd-name {
+  font-size:.58rem; color:var(--ivory); letter-spacing:.1em;
+}
+
+/* CD controls row */
+.cd-controls {
+  display:flex; gap:8px;
+}
+.cd-btn {
+  width:34px; height:34px;
+  border:2px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:var(--ivory);
+  font-size:.7rem;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  box-shadow:2px 2px 0 rgba(0,0,0,.4);
+  transition:background .15s, border-color .15s, transform .1s var(--ease-bounce);
+  font-family:var(--px);
+  -webkit-font-smoothing:none;
+}
+.cd-btn:hover  { background:rgba(203,170,203,.18); border-color:var(--lavender); transform:translate(-1px,-1px); box-shadow:3px 3px 0 rgba(0,0,0,.5); }
+.cd-btn:active { transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(0,0,0,.3); }
+.btn-play:hover  { border-color:var(--sage);  background:rgba(151,193,169,.2); }
+.btn-pause:hover { border-color:var(--cream); background:rgba(255,255,181,.15); }
+.btn-stop:hover  { border-color:var(--peach); background:rgba(252,185,170,.2); }
+
+/* Floating pixel music notes container */
+.cd-notes {
+  position:absolute; inset:0; pointer-events:none; overflow:visible;
+}
+/* Individual notes spawned by JS */
+.px-note {
+  position:absolute;
+  font-family:var(--px);
+  font-size:.55rem;
+  color:var(--cream);
+  animation:noteFloat 2s ease-out forwards;
+  pointer-events:none;
+  image-rendering:pixelated;
+  -webkit-font-smoothing:none;
+}
+@keyframes noteFloat {
+  0%   { opacity:1; transform:translateY(0)   scale(1);   }
+  100% { opacity:0; transform:translateY(-70px) scale(.7); }
+}
+
+/* ============================================================
+   REPLAY
+   ============================================================ */
+.replay-btn-main {
+  font-size:clamp(.42rem,1.5vw,.58rem);
+  background:rgba(203,170,203,.1);
+  color:var(--lavender);
+  border:2px solid rgba(203,170,203,.35);
+  box-shadow:3px 3px 0 rgba(0,0,0,.4);
+}
+.replay-btn-main:hover { background:rgba(203,170,203,.2); color:var(--ivory); border-color:var(--lavender); }
+
+/* ============================================================
+   PIXEL CONFETTI & BALLOONS (post-bake celebrate layer)
+   ============================================================ */
+.px-confetti {
+  position:fixed;
+  width:8px; height:8px;
+  pointer-events:none;
+  animation:confettiFall linear forwards;
+  z-index:36;
+  image-rendering:pixelated;
+}
+@keyframes confettiFall {
+  0%   { transform:translateY(-20px) rotate(0deg);   opacity:1; }
+  100% { transform:translateY(100vh) rotate(540deg); opacity:0; }
+}
+
+/* Pixel balloon (SVG drawn via JS, injected as absolutely positioned el) */
+.px-balloon {
+  position:fixed;
+  pointer-events:none;
+  z-index:36;
+  animation:balloonRise linear forwards;
+}
+@keyframes balloonRise {
+  0%   { transform:translateY(0)     rotate(0deg);  opacity:1; }
+  100% { transform:translateY(-110vh) rotate(10deg); opacity:0; }
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal-item {
+  opacity:0; transform:translateY(26px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.reveal-item.in-view { opacity:1; transform:translateY(0); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:640px) {
+  .hero-name  { font-size:2.8rem; }
+  .faces-row  { gap:8px; }
+  .pixel-face { width:36px; height:36px; }
+  .cd-player-row { flex-direction:column; align-items:center; }
+  .cd-card    { max-width:100%; }
+  #ingredients-row { gap:8px; }
+  .ingr-svg   { width:34px; height:34px; }
+}
