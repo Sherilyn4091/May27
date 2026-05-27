@@ -43,7 +43,6 @@
     pts.forEach(p => {
       ctx.globalAlpha = p.alpha;
       ctx.fillStyle   = p.color;
-      /* Square pixel dots */
       ctx.fillRect(Math.round(p.x), Math.round(p.y), Math.ceil(p.r * 2), Math.ceil(p.r * 2));
       p.x += p.vx; p.y += p.vy;
       if (p.x < 0)  p.x = W;
@@ -72,7 +71,6 @@
   const continueBtn = document.getElementById('bake-continue-btn');
   const celebrate   = document.getElementById('bake-celebrate');
 
-  /* Fill colors per ingredient, stacked bottom-up in bowl */
   const FILL_DATA = [
     { color:'#fffde0', label:'EGG'   },
     { color:'#5c3317', label:'CHOCO' },
@@ -83,14 +81,12 @@
 
   let dropped = 0;
 
-  /* ---- DRAG SOURCE (desktop) ---- */
   document.querySelectorAll('.ingredient').forEach(el => {
     el.addEventListener('dragstart', e => {
       e.dataTransfer.setData('text/plain', el.dataset.id);
     });
   });
 
-  /* ---- TOUCH DRAG (mobile) ---- */
   document.querySelectorAll('.ingredient').forEach(el => {
     let clone = null;
 
@@ -101,6 +97,7 @@
       clone.style.cssText = `position:fixed;opacity:.8;pointer-events:none;z-index:9999;
         left:${t.clientX - 30}px;top:${t.clientY - 44}px;transform:scale(1.1)`;
       document.body.appendChild(clone);
+      // Only preventDefault if event is cancelable
       if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
@@ -117,14 +114,12 @@
       const t      = e.changedTouches[0];
       const target = document.elementFromPoint(t.clientX, t.clientY);
       clone.remove(); clone = null;
-      /* Check drop on bowl zone or its children */
       if (bowlZone && bowlZone.contains(target)) {
         handleDrop(el.dataset.id, el);
       }
     });
   });
 
-  /* ---- DROP TARGET (desktop) ---- */
   bowlZone.addEventListener('dragover',  e => { e.preventDefault(); bowlZone.classList.add('drag-over'); });
   bowlZone.addEventListener('dragleave', () => bowlZone.classList.remove('drag-over'));
   bowlZone.addEventListener('drop', e => {
@@ -135,7 +130,6 @@
     handleDrop(id, src);
   });
 
-  /* ---- HANDLE DROP ---- */
   function handleDrop(id, srcEl) {
     if (dropped >= TOTAL) return;
     if (srcEl && srcEl.classList.contains('used')) return;
@@ -144,7 +138,6 @@
     const idx  = dropped;
     dropped++;
 
-    /* Add pixel fill rect inside bowl SVG */
     const fillY  = 88 - idx * 9;
     const rect   = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute('x',      '66');
@@ -157,14 +150,12 @@
 
     bowlHint.textContent = dropped + ' / ' + TOTAL;
 
-    /* Bounce bowl */
     const svg = document.getElementById('bowl-svg');
     if (svg) { svg.style.transform = 'scale(1.1)'; setTimeout(() => { svg.style.transform = ''; }, 200); }
 
     if (dropped === TOTAL) setTimeout(showCakeResult, 500);
   }
 
-  /* ---- SHOW CAKE RESULT ---- */
   function showCakeResult() {
     cakeResult.classList.remove('hidden');
     cakeResult.classList.add('flex');
@@ -237,7 +228,6 @@
     wrap.addEventListener('animationend', () => wrap.remove());
   }
 
-  /* ---- CONTINUE BUTTON ---- */
   if (continueBtn) {
     continueBtn.addEventListener('click', () => {
       if (typeof window.onBakingComplete === 'function') window.onBakingComplete();
